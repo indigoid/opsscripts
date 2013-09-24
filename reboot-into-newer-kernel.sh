@@ -43,6 +43,6 @@ if [ "$current" != "$newest" ] ; then
 			echo
 		fi
 	done
-	echo "rebooting into updated kernel: $newest"
-	reboot
+	echo "adding at job to reboot into the updated kernel: $newest"
+	echo reboot | at now+1 minute
 fi
