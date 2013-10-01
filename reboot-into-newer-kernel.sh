@@ -27,10 +27,10 @@ newest() {
 current="$(current)"
 newest="$(newest)"
 
-echo "current kernel: $current"
-echo "newest kernel : $newest"
-
 if [ "$current" != "$newest" ] ; then
+	echo "current kernel: $current"
+	echo "newest kernel : $newest"
+
 	for kernel in $(kernels | awk '{ print $2 }') ; do
 		if test "$current" != "$kernel" && test "$newest" != "$kernel" ; then
 			echo "cleaning up old kernel: $kernel"
