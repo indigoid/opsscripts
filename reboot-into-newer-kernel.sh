@@ -1,13 +1,5 @@
 #!/bin/sh
 
-# notes
-# - doesn't account for Oracle UEK packages
-# - removes any kernels that aren't the running or newest-installed version
-#
-# sample use via root's crontab
-# 
-# 30 23 * * * yum -q -y update && $HOME/opsscripts/reboot-into-newer-kernel.sh
-
 kernels() {
 	rpm -qa --qf '%{INSTALLTIME} %{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n' \
 		| awk '$2 ~ /^kernel-[0-9]/ { print }'
@@ -35,6 +27,9 @@ newest() {
 current="$(current)"
 newest="$(newest)"
 
+echo "current kernel: $current"
+echo "newest kernel : $newest"
+
 if [ "$current" != "$newest" ] ; then
 	for kernel in $(kernels | awk '{ print $2 }') ; do
 		if test "$current" != "$kernel" && test "$newest" != "$kernel" ; then
@@ -44,5 +39,5 @@ if [ "$current" != "$newest" ] ; then
 		fi
 	done
 	echo "adding at job to reboot into the updated kernel: $newest"
-	echo reboot | at now+1 minute
+	echo shutdown -r now | at now+1 minute
 fi
